@@ -85,6 +85,7 @@ int main()
   test_algo_on_simple_test_data(failed_tests, algos::replace_linear_v1, "replace_linear_v1");
   test_algo_on_simple_test_data(failed_tests, algos::replace_linear_v2, "replace_linear_v2");
   test_algo_on_simple_test_data(failed_tests, algos::replace_recursively_v1, "replace_recursively_v1");
+  test_algo_on_simple_test_data(failed_tests, algos::replace_recursively_v2, "replace_recursively_v2");
 
   if (!failed_tests.empty()) {
     for (auto& failed_test : failed_tests) {
@@ -97,6 +98,5 @@ int main()
   test_algo_on_data(algos::replace_linear_v1, "replace_linear_v1");
   test_algo_on_data(algos::replace_linear_v2, "replace_linear_v2");
   test_algo_on_data(algos::replace_recursively_v1, "replace_recursively_v1");
-
-  return 0;
+  test_algo_on_data(algos::replace_recursively_v2, "replace_recursively_v2");
 }
