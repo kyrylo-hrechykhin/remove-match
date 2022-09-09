@@ -38,7 +38,7 @@ void test_algo_on_simple_test_data(vector<pair<string, string>>& failed_tests,
   }
 }
 
-void test_algo_on_data(function<string(unordered_map<string, string>&, string)> algo, string id) {
+void test_algo_on_data(function<string(unordered_map<string, string>&, string)> algo, string id, int iterations) {
 
   string time_results;
   for (auto& file : filesystem::recursive_directory_iterator{ filesystem::path("./testing") })
@@ -51,25 +51,27 @@ void test_algo_on_data(function<string(unordered_map<string, string>&, string)> 
       fs >> input;
       fs >> expected_result;
 
-      auto matches = unordered_map<string, string> {
-        { "AB", "" },
-        { "BA", "" },
-        { "CD", "" },
-        { "DC", "" }
-      };
-
-      auto begin = chrono::high_resolution_clock::now();
-
-      auto result = algo(matches, input);
-
-      auto end = chrono::high_resolution_clock::now();
-      auto time_result = chrono::duration_cast<chrono::nanoseconds>(end - begin).count();
-
       time_results += file.path().u8string();
-      time_results += ",";
-      time_results += to_string(time_result);
-      time_results += ",";
-      time_results += ((result != expected_result) ? "not ok" : "ok");
+
+      for (int i = 0; i < iterations; ++i) {
+        auto matches = unordered_map<string, string> {
+          { "AB", "" },
+          { "BA", "" },
+          { "CD", "" },
+          { "DC", "" }
+        };
+
+        auto begin = chrono::high_resolution_clock::now();
+
+        auto result = algo(matches, input);
+
+        auto end = chrono::high_resolution_clock::now();
+        auto time_result = chrono::duration_cast<chrono::nanoseconds>(end - begin).count();
+
+        time_results += ",";
+        time_results += to_string(time_result);
+      }
+      
       time_results += "\n";
   }
 
@@ -95,8 +97,8 @@ int main()
     return 0;
   }
 
-  test_algo_on_data(algos::replace_linear_v1, "replace_linear_v1");
-  test_algo_on_data(algos::replace_linear_v2, "replace_linear_v2");
-  test_algo_on_data(algos::replace_recursively_v1, "replace_recursively_v1");
-  test_algo_on_data(algos::replace_recursively_v2, "replace_recursively_v2");
+  test_algo_on_data(algos::replace_linear_v1, "replace_linear_v1", 20);
+  test_algo_on_data(algos::replace_linear_v2, "replace_linear_v2", 20);
+  test_algo_on_data(algos::replace_recursively_v1, "replace_recursively_v1", 20);
+  test_algo_on_data(algos::replace_recursively_v2, "replace_recursively_v2", 20);
 }
