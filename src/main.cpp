@@ -1,6 +1,7 @@
 #include <chrono>
 #include <fstream>
 #include <filesystem>
+#include <functional>
 #include <iostream>
 #include <vector>
 #include <utility>
@@ -10,13 +11,6 @@
 
 using namespace std;
 
-auto matches = unordered_map<string, string> {
-  { "AB", "" },
-  { "BA", "" },
-  { "CD", "" },
-  { "DC", "" }
-};
-
 auto tests = vector<pair<string, string>> ({
   { "ABAB", "" },
   { "AABB", "" },
@@ -25,29 +19,72 @@ auto tests = vector<pair<string, string>> ({
   { "D", "D" }
 });
 
+void test_algo_on_simple_test_data(vector<pair<string, string>>& failed_tests,
+  function<string(unordered_map<string, string>&, string)> algo,
+  string id) {
+  
+  auto matches = unordered_map<string, string>{
+    { "AB", "" },
+    { "BA", "" },
+    { "CD", "" },
+    { "DC", "" }
+  };
+
+  for (auto test : tests) {
+      auto result = algos::replace_linear_v1(matches, test.first);
+
+      if (result != test.second)
+          failed_tests.push_back({ id, test.first });
+  }
+}
+
+void test_algo_on_data(function<string(unordered_map<string, string>&, string)> algo, string id) {
+
+  string time_results;
+  for (auto& file : filesystem::recursive_directory_iterator{ filesystem::path("./testing") })
+  {
+      ifstream fs{ file.path() };
+
+      string input;
+      string expected_result;
+
+      fs >> input;
+      fs >> expected_result;
+
+      auto matches = unordered_map<string, string> {
+        { "AB", "" },
+        { "BA", "" },
+        { "CD", "" },
+        { "DC", "" }
+      };
+
+      auto begin = chrono::high_resolution_clock::now();
+
+      auto result = algo(matches, input);
+
+      auto end = chrono::high_resolution_clock::now();
+      auto time_result = chrono::duration_cast<chrono::nanoseconds>(end - begin).count();
+
+      time_results += file.path().u8string();
+      time_results += ",";
+      time_results += to_string(time_result);
+      time_results += ",";
+      time_results += ((result != expected_result) ? "not ok" : "ok");
+      time_results += "\n";
+  }
+
+  string result_file_name = id + ".csv";
+  ofstream fs(result_file_name);
+  fs << time_results;
+  fs.close();
+}
+
 int main()
 {
   vector<pair<string, string>> failed_tests;
-  for (auto test : tests) {
-    auto result = algos::replace_linear_v1(matches, test.first);
-    
-    if (result != test.second)
-      failed_tests.push_back({ "replace_linear_v1", test.first });
-  }
-
-  for (auto test : tests) {
-    auto result = algos::replace_linear_v2(matches, test.first);
-    
-    if (result != test.second)
-      failed_tests.push_back({ "replace_linear_v2", test.first });
-  }
-
-  for (auto test : tests) {
-    auto result = algos::replace_recursively_v1(matches, test.first);
-    
-    if (result != test.second)
-      failed_tests.push_back({ "replace_recursively_v1", test.first });
-  }
+  test_algo_on_simple_test_data(failed_tests, algos::replace_linear_v1, "replace_linear_v1");
+  test_algo_on_simple_test_data(failed_tests, algos::replace_linear_v2, "replace_linear_v2");
+  test_algo_on_simple_test_data(failed_tests, algos::replace_recursively_v1, "replace_recursively_v1");
 
   if (!failed_tests.empty()) {
     for (auto& failed_test : failed_tests) {
@@ -57,101 +94,9 @@ int main()
     return 0;
   }
 
-  string time_results_linear_algo_1;
-  for (auto& file : filesystem::recursive_directory_iterator{ filesystem::path("./testing") })
-  {
-      ifstream fs{ file.path() };
-
-      string input;
-      string expected_result;
-
-      fs >> input;
-      fs >> expected_result;
-
-      auto begin = chrono::high_resolution_clock::now();
-
-      auto result = algos::replace_linear_v1(matches, input);
-
-      auto end = chrono::high_resolution_clock::now();
-      auto time_result = chrono::duration_cast<chrono::nanoseconds>(end - begin).count();
-
-      time_results_linear_algo_1 += file.path().u8string();
-      time_results_linear_algo_1 += ",";
-      time_results_linear_algo_1 += to_string(time_result);
-      time_results_linear_algo_1 += ",";
-      time_results_linear_algo_1 += ((result != expected_result) ? "not ok" : "ok");
-      time_results_linear_algo_1 += "\n";
-  }
-
-  {
-  ofstream fs("time_results_linear_algo_1.csv");
-  fs << time_results_linear_algo_1;
-  fs.close();
-  }
-  
-  string time_results_linear_algo_2;
-  for (auto& file : filesystem::recursive_directory_iterator{ filesystem::path("./testing") })
-  {
-      ifstream fs{ file.path() };
-
-      string input;
-      string expected_result;
-
-      fs >> input;
-      fs >> expected_result;
-
-      auto begin = chrono::high_resolution_clock::now();
-
-      auto result = algos::replace_linear_v2(matches, input);
-
-      auto end = chrono::high_resolution_clock::now();
-      auto time_result = chrono::duration_cast<chrono::nanoseconds>(end - begin).count();
-
-      time_results_linear_algo_2 += file.path().u8string();
-      time_results_linear_algo_2 += ",";
-      time_results_linear_algo_2 += to_string(time_result);
-      time_results_linear_algo_2 += ",";
-      time_results_linear_algo_2 += ((result != expected_result) ? "not ok" : "ok");
-      time_results_linear_algo_2 += "\n";
-  }
-
-  {
-  ofstream fs("time_results_linear_algo_2.csv");
-  fs << time_results_linear_algo_2;
-  fs.close();
-  }
-
-  string time_results_recursive_algo_v1;
-  for (auto& file : filesystem::recursive_directory_iterator{ filesystem::path("./testing") })
-  {
-      ifstream fs{ file.path() };
-
-      string input;
-      string expected_result;
-
-      fs >> input;
-      fs >> expected_result;
-
-      auto begin = chrono::high_resolution_clock::now();
-
-      auto result = algos::replace_recursively_v1(matches, input);
-
-      auto end = chrono::high_resolution_clock::now();
-      auto time_result = chrono::duration_cast<chrono::nanoseconds>(end - begin).count();
-
-      time_results_recursive_algo_v1 += file.path().u8string();
-      time_results_recursive_algo_v1 += ",";
-      time_results_recursive_algo_v1 += to_string(time_result);
-      time_results_recursive_algo_v1 += ",";
-      time_results_recursive_algo_v1 += ((result != expected_result) ? "not ok" : "ok");
-      time_results_recursive_algo_v1 += "\n";
-  }
-
-  {
-  ofstream fs("time_results_recursive_algo_v1.csv");
-  fs << time_results_recursive_algo_v1;
-  fs.close();
-  }
+  test_algo_on_data(algos::replace_linear_v1, "replace_linear_v1");
+  test_algo_on_data(algos::replace_linear_v2, "replace_linear_v2");
+  test_algo_on_data(algos::replace_recursively_v1, "replace_recursively_v1");
 
   return 0;
 }
