@@ -11,3 +11,5 @@ add_executable(remove-match ${SRC})
 add_custom_command(TARGET remove-match PRE_BUILD
                    COMMAND ${CMAKE_COMMAND} -E copy_directory
                        ${CMAKE_SOURCE_DIR}/testing/ $<TARGET_FILE_DIR:remove-match>/testing)
+
+set_target_properties(remove-match PROPERTIES VS_DEBUGGER_WORKING_DIRECTORY "$<TARGET_FILE_DIR:remove-match>")
