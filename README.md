@@ -11,9 +11,10 @@ In this repo I tried to investigate what kind of solution is better (performance
 Main assumption is that recursive algorithm may perform better than iterative solution with runtime complexity O(n) on certain inputs. That assumption is backed with recursive algorithm memoization approach. If hash function for the input works with expected O(1) runtime complexity, recursive calls for input with known result will not be processed. To prove that I need to write iterative and recursive algos so that iterative perform better on all inputs.
 
 ## Prerequisites
-CMake
-C++ compiler with support of C++17 (duh!)
-Project is supposed to be cross-platform, but only Windows tested. Feel free to check it by yourself.
+- CMake
+- C++ compiler with support of C++17 (duh!)
+
+Project is supposed to be cross-platform, but it is tested on Windows onlz. Feel free to check it by yourself on other platforms.
 
 ## How to build
 ### Generate build file
