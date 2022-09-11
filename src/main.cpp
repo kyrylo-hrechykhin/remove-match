@@ -85,8 +85,6 @@ void test_algo_on_data(function<string(unordered_map<string, string>&, string)> 
 
 void test_algo_on_random_data(function<string(unordered_map<string, string>&, string)> algo, string id, const string& input, int iterations) {
 
-    cout << "test algo '" << id << "' on random data started\n";
-
     string time_results = to_string(input.length());
 
     for (int i = 0; i < iterations; ++i) {
@@ -111,9 +109,22 @@ void test_algo_on_random_data(function<string(unordered_map<string, string>&, st
     time_results += "\n";
 
     string result_file_name = id + "_random_data.csv";
-    ofstream fs(result_file_name);
+    ofstream fs(result_file_name, ios_base::app);
     fs << time_results;
     fs.close();
+}
+
+void test_runner(int first, int last, int number_of_runs = 1000) {
+
+    for (int i = first; i <= last; i += last / number_of_runs) {
+      auto random_input = test_data_generators::get_random_data_of_size(i);
+      cout << "random input of size: " << to_string(random_input.length()) << ": " << to_string(((double)i / last) * 100) << " % \n";
+
+      test_algo_on_random_data(algos::replace_linear_v2, "replace_linear_v2", random_input, 20);
+      test_algo_on_random_data(algos::replace_recursively_v1, "replace_recursively_v1", random_input, 20);
+      test_algo_on_random_data(algos::replace_recursively_v2, "replace_recursively_v2", random_input, 20);
+      test_algo_on_random_data(algos::replace_recursively_v3, "replace_recursively_v3", random_input, 20);
+  }
 }
 
 int main()
@@ -123,6 +134,7 @@ int main()
   test_algo_on_simple_test_data(failed_tests, algos::replace_linear_v2, "replace_linear_v2");
   test_algo_on_simple_test_data(failed_tests, algos::replace_recursively_v1, "replace_recursively_v1");
   test_algo_on_simple_test_data(failed_tests, algos::replace_recursively_v2, "replace_recursively_v2");
+  test_algo_on_simple_test_data(failed_tests, algos::replace_recursively_v3, "replace_recursively_v3");
 
   if (!failed_tests.empty()) {
     for (auto& failed_test : failed_tests) {
@@ -132,18 +144,7 @@ int main()
     return 0;
   }
 
-  //test_algo_on_data(algos::replace_linear_v1, "replace_linear_v1", 20);
-  //test_algo_on_data(algos::replace_linear_v2, "replace_linear_v2", 20);
-  //test_algo_on_data(algos::replace_recursively_v1, "replace_recursively_v1", 20);
-  //test_algo_on_data(algos::replace_recursively_v2, "replace_recursively_v2", 20);
-
-  for (int i = 10e4; i <= 10e9; i += 10e4) {
-      auto random_input = test_data_generators::get_random_data_of_size(i);
-      cout << "random input of size: " << to_string(random_input.length()) << ": " << to_string((i / 10e9) * 100) << " % \n";
-
-      test_algo_on_random_data(algos::replace_linear_v1, "replace_linear_v1", random_input, 20);
-      test_algo_on_random_data(algos::replace_linear_v2, "replace_linear_v2", random_input, 20);
-      test_algo_on_random_data(algos::replace_recursively_v1, "replace_recursively_v1", random_input, 20);
-      test_algo_on_random_data(algos::replace_recursively_v2, "replace_recursively_v2", random_input, 20);
-  }
+  test_runner(0, 1000);
+  test_runner(1000, 1000000);
+  // test_runner(1000000, 1000000000);
 }
