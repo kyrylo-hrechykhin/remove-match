@@ -1,5 +1,6 @@
 #include "test_data_generators.h"
 
+#include <random>
 #include <stdlib.h>
 #include <time.h>
 
@@ -29,11 +30,13 @@ namespace test_data_generators {
 
   string get_random_data_of_size(int n) {
 
-    srand(time(0));
+    random_device rd;
+    mt19937 gen(rd());
+    uniform_int_distribution<int> dis('A', 'D');
 
     string input;
     while (n-- > 0) {
-      input += (rand() % 4) + 'A';
+        input += dis(gen);
     }
 
     return input;
