@@ -5,6 +5,48 @@
 
 namespace algos {
 
+pair<long, long> replace_recursively_in_place_internal(unordered_map<string, string>& matches,
+                                                     long first,
+                                                     long last,
+                                                     string& input) {
+
+  auto length = last - first + 1;
+  if (length == 1) {
+    return { first, last };
+  }
+
+  if (length == 2) {
+    if (matches.find({ input[first], input[last] }) != matches.end()) {
+      input[first] = input[last] = 'x';
+    }
+
+    return { first, last };
+  }
+
+  auto mid_index = (first + last) / 2;
+  auto left_range = replace_recursively_in_place_internal(matches, first, mid_index, input);
+  auto right_range = replace_recursively_in_place_internal(matches, mid_index + 1, last, input);
+
+  while (left_range.first < left_range.second
+    && right_range.first < right_range.second
+    && matches.find({ input[left_range.second], input[right_range.first] }) != matches.end()) {
+
+    input[left_range.second] = input[right_range.first] = 'x';
+    left_range.second--;
+    right_range.first++;
+  }
+
+  auto first_iter = input.begin();
+  std::advance(first_iter, first);
+
+  auto last_iter = input.begin();
+  std::advance(last_iter, last);
+
+  auto real_last_iter = std::remove(first_iter, last_iter, 'x');
+
+  return { first, static_cast<long>(distance(first_iter, real_last_iter)) };
+}
+
 string replace_linear_v1(unordered_map<string, string>& matches, string input) {
   if (input.length() < 2) {
     return input;
@@ -73,8 +115,8 @@ string replace_recursively_v1(unordered_map<string, string>& matches, string inp
   if (input.length() <= 2) {
      if (matches.find(input) != matches.end())
       return matches[input];
-    else
-      return input;
+
+    return input;
   }
 
   auto mid_index = input.length() / 2;
@@ -164,4 +206,28 @@ string replace_recursively_v3(unordered_map<string, string>& matches, string inp
 
   return matches[input] = left_input.substr(0, left_input_size) + right_input.substr(right_index);
 }
+
+string replace_recursively_in_place_v1(unordered_map<string, string>& matches, string input) {
+
+  if (input.length() < 2)
+    return input;
+
+  auto range = replace_recursively_in_place_internal(matches, 0, input.length() - 1, input);
+
+  auto last_iter = input.begin();
+  advance(last_iter, range.second);
+
+  input.erase(last_iter, input.end());
+
+  return input;
+}
+
+string replace_recursively_in_place_v2(unordered_map<string, string>& matches, string input) {
+  return input;
+}
+
+string replace_recursively_in_place_v3(unordered_map<string, string>& matches, string input) {
+  return input;
+}
+
 }

@@ -124,6 +124,7 @@ void test_runner(std::function<string(int)> generate_input, string id, int first
       test_algo_on_data(algos::replace_recursively_v1, id + "_recursively_v1", input, 20);
       test_algo_on_data(algos::replace_recursively_v2, id + "_recursively_v2", input, 20);
       test_algo_on_data(algos::replace_recursively_v3, id + "_recursively_v3", input, 20);
+      test_algo_on_data(algos::replace_recursively_in_place_v1, id + "_recursively_in_place_v1", input, 20);
   }
 }
 
@@ -135,6 +136,7 @@ int main()
   test_algo_on_simple_test_data(failed_tests, algos::replace_recursively_v1, "replace_recursively_v1");
   test_algo_on_simple_test_data(failed_tests, algos::replace_recursively_v2, "replace_recursively_v2");
   test_algo_on_simple_test_data(failed_tests, algos::replace_recursively_v3, "replace_recursively_v3");
+  test_algo_on_simple_test_data(failed_tests, algos::replace_recursively_in_place_v1, "replace_recursively_in_place_v1");
 
   if (!failed_tests.empty()) {
     for (auto& failed_test : failed_tests) {
@@ -145,10 +147,10 @@ int main()
   }
 
   test_runner(test_data_generators::get_random_data_of_size, "random", 0, 1000);
-  test_runner(test_data_generators::get_random_data_of_size, "random", 1000, 1000000);
-  test_runner(test_data_generators::get_random_data_of_size, "random", 1000000, 100000000, 100);
+  //test_runner(test_data_generators::get_random_data_of_size, "random", 1000, 1000000);
+  // test_runner(test_data_generators::get_random_data_of_size, "random", 1000000, 100000000, 100);
 
   test_runner(test_data_generators::get_best_case_scenario_data_of_size, "best_case", 0, 1000);
   test_runner(test_data_generators::get_best_case_scenario_data_of_size, "best_case", 1000, 1000000);
-  test_runner(test_data_generators::get_best_case_scenario_data_of_size, "best_case", 1000000, 100000000, 100);
+  // test_runner(test_data_generators::get_best_case_scenario_data_of_size, "best_case", 1000000, 100000000, 100);
 }
