@@ -83,7 +83,7 @@ void test_algo_on_data(function<string(unordered_map<string, string>&, string)> 
   fs.close();
 }
 
-void test_algo_on_random_data(function<string(unordered_map<string, string>&, string)> algo, string id, const string& input, int iterations) {
+void test_algo_on_data(function<string(unordered_map<string, string>&, string)> algo, string id, const string& input, int iterations) {
 
     string time_results = to_string(input.length());
 
@@ -108,22 +108,22 @@ void test_algo_on_random_data(function<string(unordered_map<string, string>&, st
 
     time_results += "\n";
 
-    string result_file_name = id + "_random_data.csv";
+    string result_file_name = id + ".csv";
     ofstream fs(result_file_name, ios_base::app);
     fs << time_results;
     fs.close();
 }
 
-void test_runner(int first, int last, int number_of_runs = 1000) {
+void test_runner(std::function<string(int)> generate_input, string id, int first, int last, int number_of_runs = 1000) {
 
     for (int i = first; i <= last; i += last / number_of_runs) {
-      auto random_input = test_data_generators::get_random_data_of_size(i);
-      cout << "random input of size: " << to_string(random_input.length()) << ": " << to_string(((double)i / last) * 100) << " % \n";
+      auto input = generate_input(i);
+      cout << "input of size: " << to_string(input.length()) << ": " << to_string((i * 100 / last)) << " % \n";
 
-      test_algo_on_random_data(algos::replace_linear_v2, "replace_linear_v2", random_input, 20);
-      test_algo_on_random_data(algos::replace_recursively_v1, "replace_recursively_v1", random_input, 20);
-      test_algo_on_random_data(algos::replace_recursively_v2, "replace_recursively_v2", random_input, 20);
-      test_algo_on_random_data(algos::replace_recursively_v3, "replace_recursively_v3", random_input, 20);
+      test_algo_on_data(algos::replace_linear_v2, id + "_linear_v2", input, 20);
+      test_algo_on_data(algos::replace_recursively_v1, id + "_recursively_v1", input, 20);
+      test_algo_on_data(algos::replace_recursively_v2, id + "_recursively_v2", input, 20);
+      test_algo_on_data(algos::replace_recursively_v3, id + "_recursively_v3", input, 20);
   }
 }
 
@@ -144,7 +144,11 @@ int main()
     return 0;
   }
 
-  test_runner(0, 1000);
-  test_runner(1000, 1000000);
-  // test_runner(1000000, 1000000000);
+  test_runner(test_data_generators::get_random_data_of_size, "random", 0, 1000);
+  test_runner(test_data_generators::get_random_data_of_size, "random", 1000, 1000000);
+  test_runner(test_data_generators::get_random_data_of_size, "random", 1000000, 100000000, 100);
+
+  test_runner(test_data_generators::get_best_case_scenario_data_of_size, "best_case", 0, 1000);
+  test_runner(test_data_generators::get_best_case_scenario_data_of_size, "best_case", 1000, 1000000);
+  test_runner(test_data_generators::get_best_case_scenario_data_of_size, "best_case", 1000000, 100000000, 100);
 }
