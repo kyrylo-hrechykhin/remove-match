@@ -127,9 +127,6 @@ void test_runner(std::function<string(int)> generate_input, string id, int first
       cout << "input of size: " << to_string(input.length()) << ": " << to_string((i * 100 / last)) << " % \n";
 
       test_algo_on_data(algos::replace_linear_v2, id + "_linear_v2", input, 20);
-      test_algo_on_data(algos::replace_recursively_v1, id + "_recursively_v1", input, 20);
-      test_algo_on_data(algos::replace_recursively_v2, id + "_recursively_v2", input, 20);
-      test_algo_on_data(algos::replace_recursively_v3, id + "_recursively_v3", input, 20);
       test_algo_on_data(algos::replace_recursively_in_place_v1, id + "_recursively_in_place_v1", input, 20);
       test_algo_on_data(algos::replace_recursively_in_place_v2, id + "_recursively_in_place_v2", input, 20);
       test_algo_on_data(algos::replace_recursively_in_place_v3, id + "_recursively_in_place_v3", input, 20);
@@ -141,9 +138,6 @@ int main()
   vector<pair<string, string>> failed_tests;
   test_algo_on_simple_test_data(failed_tests, algos::replace_linear_v1, "replace_linear_v1");
   test_algo_on_simple_test_data(failed_tests, algos::replace_linear_v2, "replace_linear_v2");
-  test_algo_on_simple_test_data(failed_tests, algos::replace_recursively_v1, "replace_recursively_v1");
-  test_algo_on_simple_test_data(failed_tests, algos::replace_recursively_v2, "replace_recursively_v2");
-  test_algo_on_simple_test_data(failed_tests, algos::replace_recursively_v3, "replace_recursively_v3");
   test_algo_on_simple_test_data(failed_tests, algos::replace_recursively_in_place_v1, "replace_recursively_in_place_v1");
   test_algo_on_simple_test_data(failed_tests, algos::replace_recursively_in_place_v2, "replace_recursively_in_place_v2");
   test_algo_on_simple_test_data(failed_tests, algos::replace_recursively_in_place_v3, "replace_recursively_in_place_v3");
@@ -156,12 +150,14 @@ int main()
     return 0;
   }
 
-  test_runner(test_data_generators::get_random_data_of_size, "random", 0, 1000);
   test_runner(test_data_generators::get_random_data_of_size, "random", 1000, 1000000);
-
-  test_runner(test_data_generators::get_best_case_scenario_data_of_size, "best_case", 0, 1000);
   test_runner(test_data_generators::get_best_case_scenario_data_of_size, "best_case", 1000, 1000000);
-
-  test_runner(test_data_generators::get_worst_case_scenario_data_of_size, "worst_case", 0, 1000);
   test_runner(test_data_generators::get_worst_case_scenario_data_of_size, "worst_case", 1000, 1000000);
+
+  test_runner(test_data_generators::get_10percent_random_data_of_size, "10percent_random", 1000, 1000000);
+  test_runner(test_data_generators::get_20percent_random_data_of_size, "20percent_random", 1000, 1000000);
+  test_runner(test_data_generators::get_30percent_random_data_of_size, "30percent_random", 1000, 1000000);
+  test_runner(test_data_generators::get_70percent_random_data_of_size, "70percent_random", 1000, 1000000);
+  test_runner(test_data_generators::get_80percent_random_data_of_size, "80percent_random", 1000, 1000000);
+  test_runner(test_data_generators::get_90percent_random_data_of_size, "90percent_random", 1000, 1000000);
 }
