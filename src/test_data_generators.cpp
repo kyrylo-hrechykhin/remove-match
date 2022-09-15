@@ -12,6 +12,9 @@ namespace test_data_generators {
       input += "AB";
     }
 
+    if (n % 2 != 0)
+        input += "A";
+
     return input;
   }
 
@@ -24,6 +27,9 @@ namespace test_data_generators {
 
     while (i++ <= n)
       input += "B";
+
+    if (n % 2 != 0)
+        input += "B";
 
     return input;
   }

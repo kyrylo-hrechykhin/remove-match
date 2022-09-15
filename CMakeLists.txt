@@ -4,7 +4,7 @@ set(CMAKE_CXX_STANDARD 17)
 
 project (remove-match)
 
-file(GLOB SRC src/*)
+file(GLOB SRC src/* src/algos/*)
 
 add_executable(remove-match ${SRC})
 
