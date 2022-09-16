@@ -19,11 +19,15 @@ string get_random_data_of_size(int n);
 string get_10percent_random_data_of_size(int n);
 string get_20percent_random_data_of_size(int n);
 string get_30percent_random_data_of_size(int n);
+string get_40percent_random_data_of_size(int n);
 
 // best case scenario data that is n% randomized
 // technically random data that is (100 - n)% best-caso-mized
-string get_90percent_random_data_of_size(int n);
-string get_80percent_random_data_of_size(int n);
+string get_60percent_random_data_of_size(int n);
 string get_70percent_random_data_of_size(int n);
+string get_80percent_random_data_of_size(int n);
+string get_90percent_random_data_of_size(int n);
+
+string get_A_letter_of_size(int n);
 
 }

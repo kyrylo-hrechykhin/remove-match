@@ -92,6 +92,7 @@ void test_algo_on_data(function<string(unordered_map<string, string>&, string)> 
 void test_algo_on_data(function<string(unordered_map<string, string>&, string)> algo, string id, const string& input, int iterations) {
 
     string time_results = to_string(input.length());
+    double sum_of_time_results = 0.0;
 
     for (int i = 0; i < iterations; ++i) {
         auto matches = unordered_map<string, string> {
@@ -110,8 +111,12 @@ void test_algo_on_data(function<string(unordered_map<string, string>&, string)> 
 
         time_results += ",";
         time_results += to_string(time_result);
+
+        sum_of_time_results += time_result;
     }
 
+    time_results += ",";
+    time_results += to_string(sum_of_time_results / iterations);
     time_results += "\n";
 
     string result_file_name = id + ".csv";
@@ -153,10 +158,13 @@ int main()
   test_runner(test_data_generators::get_random_data_of_size, "random", 1000, 1000000);
   test_runner(test_data_generators::get_best_case_scenario_data_of_size, "best_case", 1000, 1000000);
   test_runner(test_data_generators::get_worst_case_scenario_data_of_size, "worst_case", 1000, 1000000);
+  test_runner(test_data_generators::get_A_letter_of_size, "AAA_input", 1000, 4000000);
 
   test_runner(test_data_generators::get_10percent_random_data_of_size, "10percent_random", 1000, 1000000);
   test_runner(test_data_generators::get_20percent_random_data_of_size, "20percent_random", 1000, 1000000);
   test_runner(test_data_generators::get_30percent_random_data_of_size, "30percent_random", 1000, 1000000);
+  test_runner(test_data_generators::get_40percent_random_data_of_size, "40percent_random", 1000, 1000000);
+  test_runner(test_data_generators::get_60percent_random_data_of_size, "60percent_random", 1000, 1000000);
   test_runner(test_data_generators::get_70percent_random_data_of_size, "70percent_random", 1000, 1000000);
   test_runner(test_data_generators::get_80percent_random_data_of_size, "80percent_random", 1000, 1000000);
   test_runner(test_data_generators::get_90percent_random_data_of_size, "90percent_random", 1000, 1000000);

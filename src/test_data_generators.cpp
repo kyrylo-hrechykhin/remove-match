@@ -101,16 +101,27 @@ namespace test_data_generators {
     return get_randomized_best_case_data_of_size(n, 0.3);
   }
 
-  string get_90percent_random_data_of_size(int n) {
-    return get_bestcasomized_random_data_of_size(n, 0.1);
+  string get_40percent_random_data_of_size(int n) {
+    return get_randomized_best_case_data_of_size(n, 0.4);
   }
 
-  string get_80percent_random_data_of_size(int n) {
-    return get_bestcasomized_random_data_of_size(n, 0.2);
+  string get_60percent_random_data_of_size(int n) {
+    return get_bestcasomized_random_data_of_size(n, 0.4);
   }
 
   string get_70percent_random_data_of_size(int n) {
     return get_bestcasomized_random_data_of_size(n, 0.3);
   }
 
+  string get_80percent_random_data_of_size(int n) {
+    return get_bestcasomized_random_data_of_size(n, 0.2);
+  }
+
+  string get_90percent_random_data_of_size(int n) {
+    return get_bestcasomized_random_data_of_size(n, 0.1);
+  }
+
+  string get_A_letter_of_size(int n) {
+    return string(n, 'A');
+  }
 }
