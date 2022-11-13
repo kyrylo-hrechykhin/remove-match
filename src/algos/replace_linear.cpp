@@ -69,4 +69,39 @@ string replace_linear_v2(unordered_map<string, string>& matches, string input) {
   return input;
 }
 
+string replace_linear_v3(unordered_map<string, string>& matches, string input) {
+
+  if (input.length() < 2) {
+    return input;
+  }
+
+  size_t new_length = 1;
+  auto check = 1;
+  while (check < input.size()) {
+
+    if (matches.find(string({ input[new_length - 1], input[check] })) == matches.end()) {
+      input[new_length] = input[check];
+
+      ++new_length;
+      ++check;
+      continue;
+    }
+
+    ++check;
+
+    if (new_length > 0) {
+      --new_length;
+    }
+
+    if (new_length == 0 && check < input.size()) {
+      input[new_length] = input[check];
+
+      ++new_length;
+      ++check;
+    }
+  }
+
+  return input.substr(0, new_length);
+}
+
 }
