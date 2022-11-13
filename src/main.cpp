@@ -125,7 +125,7 @@ void test_algo_on_data(function<string(unordered_map<string, string>&, string)> 
     fs.close();
 }
 
-void test_runner(std::function<string(int)> generate_input, string id, int first, int last, int number_of_runs = 1000) {
+void test_runner(std::function<string(int)> generate_input, string id, int first, int last, int number_of_runs = 100) {
 
     for (int i = first; i <= last; i += last / number_of_runs) {
       auto input = generate_input(i);
@@ -157,13 +157,13 @@ int main()
     return 0;
   }
 
-  test_runner(test_data_generators::get_random_data_of_size, "random", 1000, 1000000);
-  test_runner(test_data_generators::get_best_case_scenario_data_of_size, "best_case", 1000, 1000000);
-  test_runner(test_data_generators::get_worst_case_scenario_data_of_size, "worst_case", 1000, 1000000);
-  test_runner(test_data_generators::get_A_letter_of_size, "AAA_input", 1000, 4000000);
+  test_runner(test_data_generators::get_random_data_of_size, "random", 10000, 1000000);
+  test_runner(test_data_generators::get_best_case_scenario_data_of_size, "best_case", 10000, 1000000);
+  test_runner(test_data_generators::get_worst_case_scenario_data_of_size, "worst_case", 10000, 1000000);
+  test_runner(test_data_generators::get_A_letter_of_size, "AAA_input", 10000, 4000000);
 
-  test_runner(test_data_generators::get_10percent_random_data_of_size, "10percent_random", 1000, 1000000);
-  test_runner(test_data_generators::get_40percent_random_data_of_size, "40percent_random", 1000, 1000000);
-  test_runner(test_data_generators::get_60percent_random_data_of_size, "60percent_random", 1000, 1000000);
-  test_runner(test_data_generators::get_90percent_random_data_of_size, "90percent_random", 1000, 1000000);
+  test_runner(test_data_generators::get_10percent_random_data_of_size, "10percent_random", 10000, 1000000);
+  test_runner(test_data_generators::get_40percent_random_data_of_size, "40percent_random", 10000, 1000000);
+  test_runner(test_data_generators::get_60percent_random_data_of_size, "60percent_random", 10000, 1000000);
+  test_runner(test_data_generators::get_90percent_random_data_of_size, "90percent_random", 10000, 1000000);
 }
