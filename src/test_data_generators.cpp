@@ -7,7 +7,7 @@
 namespace {
 
   string get_randomized_best_case_data_of_size(int n, double share_of_random) {
-    auto base_data = test_data_generators::get_best_case_scenario_data_of_size(n);
+    auto base_data = test_data_generators::get_A_letter_of_size(n);
 
     random_device rd;
     mt19937 gen(rd());
@@ -36,9 +36,10 @@ namespace {
 
       auto random_index = indices(gen);
 
-      // this change is based on assumption that best case scenario is
-      // a set of repeated ABAB sequences
-      base_data[random_index] = (random_index % 2 != 0) ? 'B' : 'A';
+      // this change is based on the fact that best case scenario is
+      // a set of sequences that should not be removed.
+      // the most simple example is a set of only on letter.
+      base_data[random_index] = 'A';
     }
 
     return base_data;
